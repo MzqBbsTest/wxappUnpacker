@@ -134,6 +134,7 @@ function doWxss(dir, cb, mainDir, nowDir) {
                     attach = "/*! Import end */";
                 }
             }
+            console.log(pureData, data)
             let exactData = isPure ? pureData[data] : data;
             for (let content of exactData)
                 if (typeof content === "object") {
@@ -220,7 +221,7 @@ function doWxss(dir, cb, mainDir, nowDir) {
             if (node.children) {
                 const removeType = ["webkit", "moz", "ms", "o"];
                 let list = {};
-                node.children.each((son, item) => {
+                node.children.forEach((son, item) => {
                     if (son.type == "Declaration") {
                         if (list[son.property]) {
                             let a = item, b = list[son.property], x = son, y = b.data, ans = null;
@@ -319,13 +320,15 @@ function doWxss(dir, cb, mainDir, nowDir) {
             // let wxAppCodeVarDeclareIndex = mainCode.indexOf(wxAppCodeVarDeclare);
             // let wxAppCodeVarDeclareEnd = wxAppCodeVarDeclareIndex + wxAppCodeVarDeclare.length;
             // mainCode = mainCode.substr(0, wxAppCodeVarDeclareIndex) + mainCode.substr(wxAppCodeVarDeclareEnd);
-
-            code = code.slice(code.lastIndexOf('var setCssToHead = function(file, _xcInvalid'));
-            code = code.slice(code.lastIndexOf('\nvar _C= ') + 1);
+            code = code.slice(code.lastIndexOf('var __COMMON_STYLESHEETS__ = __COMMON_STYLESHEETS__||{}'));
+            code2 = code.slice(0, code.lastIndexOf('var setCssToHead = function(file, _xcInvalid, info'));
+            code = code.slice(code.lastIndexOf('var setCssToHead = function(file, _xcInvalid, info'));
+            code = code.slice(code.lastIndexOf('\nvar _C = ') + 1);
             //let oriCode=code;
             code = code.slice(0, code.indexOf('\n'));
+            // console.log(code2 + code)
             let vm = new VM({sandbox: {}});
-            pureData = vm.run(code + "\n_C");
+            pureData = vm.run(code2 + code + "\n_C");
             //let mainCode=oriCode.slice(oriCode.indexOf("setCssToHead"),oriCode.lastIndexOf(";var __pageFrameEndTime__"));
             console.log("Guess wxss(first turn)...");
             preRun(dir, frameFile, mainCode, files, () => {
@@ -341,7 +344,8 @@ function doWxss(dir, cb, mainDir, nowDir) {
                     } else {
                         let newFile = path.resolve(dir, "__wuBaseWxss__/" + id + ".wxss");
                         console.log("Cannot find pure import for _C[" + id + "], force to save it in (" + newFile + ").");
-                        id = Number.parseInt(id);
+                        // id = Number.parseInt(id);
+                        // id = Number.parseInt(id);
                         actualPure[id] = newFile;
                         cssRebuild.call({cssFile: newFile}, id)();
                     }

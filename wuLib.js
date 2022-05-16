@@ -56,9 +56,17 @@ class LimitedRunner {
         }
     }
 
+    //fs.readFile.bind(fs), name, opt,
+    // read
+    // name
+    // opt
+    // (err, data) => {
+    //     if (err) throw Error("Read file error: " + err);
+    //     else cb(data);
+    //     ioEvent.decount();
+    // }
     runWithCb(func, ...args) {
         let cb = args.pop(), self = this;
-
         function agent(...args) {
             self.done();
             return cb.apply(this, args);

@@ -1,0 +1,7 @@
+./bingo.sh testpkg/_-1044227528_232.wxapkg
+./bingo.sh ./testpkg/_-408563534_232.wxapkg -s=../_-1044227528_232
+./bingo.sh ./testpkg/_-2136758478_232.wxapkg -s=../_-1044227528_232
+./bingo.sh ./testpkg/_-758876615_232.wxapkg -s=../_-1044227528_232
+
+./bingo.sh ./testpkg/_-1635202514_3.wxapkg -s=../_-1044227528_232
+
